@@ -86,7 +86,7 @@ class FunSetSuite extends FunSuite {
    * Once you finish your implementation of "singletonSet", exchange the
    * function "ignore" by "test".
    */
-  ignore("singletonSet(1) contains 1") {
+  test("singletonSet(1) contains 1") {
     
     /**
      * We create a new instance of the "TestSets" trait, this gives us access
@@ -101,12 +101,112 @@ class FunSetSuite extends FunSuite {
     }
   }
 
-  ignore("union contains all elements") {
+  test("singletonSet(1) does not contain 2") {
+    new TestSets {
+      assert(!contains(s1, 2), "Singleton")
+    }
+  }
+  
+  test("union contains all elements") {
     new TestSets {
       val s = union(s1, s2)
       assert(contains(s, 1), "Union 1")
       assert(contains(s, 2), "Union 2")
       assert(!contains(s, 3), "Union 3")
+    }
+  }
+  
+  test("intersect contains duplicate elements") {
+    new TestSets {
+      val s = intersect(s1, s1)
+      assert(contains(s, 1), "Intersect 1")
+      assert(!contains(s, 2), "Intersect 2")
+    }
+  }
+  
+  test("intersect does not contain unique elements") {
+    new TestSets {
+      val s = intersect(s1, s2)
+      assert(!contains(s, 1), "Intersect 1")
+      assert(!contains(s, 2), "Intersect 2")
+    }
+  }
+  
+  test("diff contains elements in a not in b") {
+    new TestSets {
+      val s = diff(s1, s2)
+      assert(contains(s, 1), "Diff 1")
+    }
+  }
+  
+  test("diff does not contain elements in b not in a") {
+    new TestSets {
+      val s = diff(s1, s2)
+      assert(!contains(s, 2), "Diff 2")
+    }
+  }
+  
+  test("diff does not contain same elements") {
+    new TestSets {
+      val s = diff(s1, s1)
+      assert(!contains(s, 1), "Diff 1")
+    }
+  }
+  
+  test("filter contains correct elements") {
+    new TestSets {
+      val s = filter(s1, x => x == 1)
+      assert(contains(s, 1), "Filter 1")
+    }
+  }
+  
+  test("filter does not contains elements outside set") {
+    new TestSets {
+      val s = filter(s1, x => x == 2)
+      assert(!contains(s, 2), "Filter 2")
+    }
+  }
+  
+  test("filter does not contain elements that do not match filter") {
+    new TestSets {
+      val s = filter(s1, x => x == 2)
+      assert(!contains(s, 1), "Filter 1")
+    }
+  }
+  
+  test("forall false if all elements in set do not match predicate") {
+    new TestSets {
+      val s = forall(s1, x => x == 2)
+      assert(s == false, "Forall 2")
+    }
+  }
+  
+  test("forall true if all elements in set match predicate") {
+    new TestSets {
+      val s = forall(s1, x => x == 1)
+      assert(s == true, "Forall 1")
+    }
+  }
+  
+  test("exists true if an integer in set matches predicate") {
+    new TestSets {
+      val s = exists(s1, x => x == 1)
+      assert(s == true, "Exists 1")
+    }
+  }
+  
+  test("exists false if no integer in set matches predicate") {
+    new TestSets {
+      val s = exists(s1, x => x == 2)
+      assert(s == false, "Exists 2")
+    }
+  }
+  
+  test("map transforms items in set") {
+    new TestSets {
+      val s = map(s1, x => 2)
+      assert(!contains(s, 1), "Map 1")
+      assert(contains(s, 2), "Map 2")
     }
   }
 }
