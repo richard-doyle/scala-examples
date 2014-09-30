@@ -8,14 +8,21 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class TweetSetSuite extends FunSuite {
   trait TestSets {
-    val set1 = new Empty
-    val set2 = set1.incl(new Tweet("a", "a body", 20))
-    val set3 = set2.incl(new Tweet("b", "b body", 20))
+    val a = new Tweet("a", "a body", 20)
+    val b = new Tweet("b", "b body", 20)
     val c = new Tweet("c", "c body", 7)
     val d = new Tweet("d", "d body", 9)
+    val e = new Tweet("e", "e body", 11)
+    val f = new Tweet("f", "f body", 15)
+    val g = new Tweet("g", "g body", 12)
+    val set1 = new Empty
+    val set2 = set1.incl(a)
+    val set3 = set2.incl(b)
     val set4c = set3.incl(c)
     val set4d = set3.incl(d)
     val set5 = set4c.incl(d)
+    val complexSet = set1.incl(d).incl(f).incl(a).incl(b).incl(c).incl(e).incl(g)
+    val set6 = set2.incl(c)
   }
 
   def asSet(tweets: TweetSet): Set[Tweet] = {
@@ -44,6 +51,12 @@ class TweetSetSuite extends FunSuite {
     }
   }
 
+  test("filter: >11 on complexSet") {
+    new TestSets {
+      assert(size(complexSet.filter(tw => tw.retweets > 11)) === 4)
+    }
+  }
+
   test("union: set4c and set4d") {
     new TestSets {
       assert(size(set4c.union(set4d)) === 4)
@@ -59,6 +72,12 @@ class TweetSetSuite extends FunSuite {
   test("union: with empty set (2)") {
     new TestSets {
       assert(size(set1.union(set5)) === 4)
+    }
+  }
+  
+  test("most retweeted: set6") {
+    new TestSets {
+      assert(set6.mostRetweeted.text === "a body")
     }
   }
 
