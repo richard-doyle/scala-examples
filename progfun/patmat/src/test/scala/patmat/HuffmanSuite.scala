@@ -100,4 +100,28 @@ class HuffmanSuite extends FunSuite {
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
   }
+  
+  test("codeBits should return list of bits") {
+    val codeTable = List(('a', List(0, 1, 0)), ('b', List(1, 1, 1)))
+    assert(codeBits(codeTable)('a') === List(0, 1, 0))
+    assert(codeBits(codeTable)('b') === List(1, 1, 1))
+  }
+  
+  test("convert should return a code table") {
+    new TestTrees {
+      assert(convert(t2) === List(('a', List(0, 0)), ('b', List(0, 1)), ('d', List(1))))
+    }
+  }
+  
+  test("mergeCodeTables should add 0 to all elements in first arg, 1 to second and concat") {
+    val codeTable1 = List(('a', List(1, 0)), ('b', List(0, 0)))
+    val codeTable2 = List(('c', List(1, 1)), ('d', List(0, 1)))
+    assert(mergeCodeTables(codeTable1, codeTable2) === List(('a', List(0, 1, 0)), ('b', List(0, 0, 0)), ('c', List(1, 1, 1)), ('d', List(1, 0, 1))))
+  }
+  
+  test("decode and quickEncode a very short text should be identity") {
+    new TestTrees {
+      assert(decode(t1, quickEncode(t1)("ab".toList)) === "ab".toList)
+    }
+  }
 }
