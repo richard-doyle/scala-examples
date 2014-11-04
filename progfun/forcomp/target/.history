@@ -1,2 +1,5 @@
 test
 run
+sbt test
+test
+submit rdoyle@scottlogic.com yhbdEzeKpm
